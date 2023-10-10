@@ -102,7 +102,7 @@ const ContactUs: React.FC = () => {
                         <input
                           type="number"
                           name="contactNumber"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white "
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white text-black"
                           placeholder="Contact Number"
                           value={formData.contactNumber}
                           onChange={handleChange}
@@ -121,8 +121,8 @@ const ContactUs: React.FC = () => {
                       <div className="relative mb-6" data-te-input-wrapper-init>
                         <textarea
                           name="message"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white "
-                          rows={3}
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white text-black"
+                          rows={6}
                           placeholder="Your message"
                           value={formData.message}
                           onChange={handleChange}

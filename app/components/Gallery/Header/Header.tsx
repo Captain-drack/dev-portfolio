@@ -64,18 +64,6 @@ const Header: React.FC = () => {
             </span>
           </Link>
         </div>
-        {/* mid part */}
-        <div className="hidden lg:flex items-center space-x-8">
-          {menuItems.map((menuItem, index) => (
-            <Link
-              key={index}
-              href={menuItem.link}
-              className="text-l text-slate-400 font-bold hover:text-white cursor-pointer"
-            >
-              {menuItem.text}
-            </Link>
-          ))}
-        </div>
         {/* right part */}
         <div className="flex items-center gap-4">
           <div className="relative" ref={dropdownRef}>
@@ -96,7 +84,7 @@ const Header: React.FC = () => {
               } divide-y absolute right-0 mt-1 bg-indigo-800 divide-slate-400 rounded-lg shadow-xl w-44`}
             >
               <ul
-                className="block lg:hidden  py-2 text-sm text-gray-700 dark:text-gray-200"
+                className="block lg:hidden py-2 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownDividerButton"
               >
                 <li>
@@ -142,10 +130,10 @@ const Header: React.FC = () => {
               </ul>
               <div className="py-2">
                 <Link
-                  href="/gallery"
+                  href="/"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:text-gray-200 dark:hover:text-white"
                 >
-                  Gallery
+                  Home
                 </Link>
               </div>
             </div>
