@@ -19,7 +19,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <div className="h-screen w-screen overflow-y-scroll bg-gradient-to-r from-blue-950 from-10%  to-indigo-600  flex justify-center scroll-smooth">
           <div className="w-full h-screen px-5 md:w-5/6 ">
             <Header />

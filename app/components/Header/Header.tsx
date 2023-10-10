@@ -17,12 +17,17 @@ import {
 } from "./HeaderData";
 
 const Header: React.FC = () => {
-  const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
 
   // Function to toggle the dropdown visibility
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleDropdownItemClick = () => {
+    setDropdownVisible(false);
   };
 
   // Function to close the dropdown when clicking outside of it
@@ -101,6 +106,7 @@ const Header: React.FC = () => {
               >
                 <li>
                   <Link
+                    onClick={handleDropdownItemClick}
                     href="#about"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
                   >
@@ -109,6 +115,7 @@ const Header: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleDropdownItemClick}
                     href="#experience"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
                   >
@@ -117,6 +124,7 @@ const Header: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleDropdownItemClick}
                     href="#skills"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
                   >
@@ -125,6 +133,7 @@ const Header: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleDropdownItemClick}
                     href="#projects"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
                   >
@@ -133,6 +142,7 @@ const Header: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleDropdownItemClick}
                     href="#contact"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
                   >
@@ -142,6 +152,7 @@ const Header: React.FC = () => {
               </ul>
               <div className="py-2">
                 <Link
+                  onClick={handleDropdownItemClick}
                   href="/gallery"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:text-gray-200 dark:hover:text-white"
                 >
