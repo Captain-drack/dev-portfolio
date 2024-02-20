@@ -52,7 +52,7 @@ function Body() {
               </p> */}
             </div>
             <Link
-              href="/Akshat-Austin.pdf"
+              href="/Akshat-Austin-Resume.pdf"
               download="Akshat-Austin"
               target="_blank"
               rel="noreferrer"
