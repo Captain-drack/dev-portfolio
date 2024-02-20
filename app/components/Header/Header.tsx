@@ -20,16 +20,14 @@ const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const [isGalleryActive, setIsGalleryActive] = useState<boolean>(false);
 
   // Function to toggle the dropdown visibility
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
 
-  const handleDropdownItemClick = (isGallery: boolean = false) => {
+  const handleDropdownItemClick = () => {
     setDropdownVisible(false);
-    setIsGalleryActive(isGallery);
   };
 
   // Function to close the dropdown when clicking outside of it
@@ -56,21 +54,6 @@ const Header: React.FC = () => {
     };
   }, [isDropdownVisible]);
 
-  // UseEffect to check the current path from window location
-  useEffect(() => {
-    // Function to check if the current page is the gallery
-    const checkIfGalleryIsActive = () => {
-      const path = window.location.pathname;
-      // Update the state based on your gallery page's path
-      // For example, if your gallery page's path is '/gallery', check for it
-      setIsGalleryActive(path === '/gallery');
-    };
-
-    // Execute the check once the component mounts
-    checkIfGalleryIsActive();
-  }, []);
-
-
   return (
     <header>
       <div className=" flex items-center justify-between py-8">
@@ -87,19 +70,17 @@ const Header: React.FC = () => {
           </Link>
         </div>
         {/* mid part */}
-        {!isGalleryActive && (
-          <div className="hidden lg:flex items-center space-x-8">
-            {menuItems.map((menuItem, index) => (
-              <Link
-                key={index}
-                href={menuItem.link}
-                className="text-l text-slate-400 font-bold hover:text-white cursor-pointer"
-              >
-                {menuItem.text}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="hidden lg:flex items-center space-x-8">
+          {menuItems.map((menuItem, index) => (
+            <Link
+              key={index}
+              href={menuItem.link}
+              className="text-l text-slate-400 font-bold hover:text-white cursor-pointer"
+            >
+              {menuItem.text}
+            </Link>
+          ))}
+        </div>
         {/* right part */}
         <div className="flex items-center gap-4">
           <div className="relative" ref={dropdownRef}>
