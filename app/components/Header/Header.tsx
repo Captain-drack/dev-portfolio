@@ -11,7 +11,6 @@ import {
 } from "react-icons/bi";
 import {
   menuItems,
-  socialMediaLinks,
   logoText,
   logoTextSecondary,
 } from "./HeaderData";
@@ -70,7 +69,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
         {/* mid part */}
-        <div className="hidden lg:flex items-center space-x-8">
+        <div className="hidden lg:flex justify-center items-center space-x-8 flex-wrap">
           {menuItems.map((menuItem, index) => (
             <Link
               key={index}
@@ -160,29 +159,6 @@ const Header: React.FC = () => {
                 </Link>
               </div>
             </div>
-          </div>
-
-          <div className="hidden lg:flex items-center space-x-4">
-            {socialMediaLinks.map((socialLink, index) => (
-              <Link
-                target="_blank"
-                key={index}
-                href={socialLink.link}
-                className="p-2 rounded-full bg-white"
-              >
-                {socialLink.text === "Facebook" ? (
-                  <BiLogoFacebook className="text-xl text-black hover:text-blue-700" />
-                ) : socialLink.text === "Instagram" ? (
-                  <BiLogoInstagram className="text-xl text-black hover:text-red-400" />
-                ) : socialLink.text === "LinkedIn" ? (
-                  <BiLogoLinkedin className="text-xl text-black hover:text-blue-600" />
-                ) : socialLink.text === "Whatsapp" ? (
-                  <BiLogoWhatsapp className="text-xl text-black hover:text-green-600" />
-                ) : (
-                  <BiLogoGithub className="text-xl text-black" />
-                )}
-              </Link>
-            ))}
           </div>
         </div>
       </div>

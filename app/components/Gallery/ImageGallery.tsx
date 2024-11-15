@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @next/next/no-img-element */
+import React from "react";
 
 export interface ImageProps {
   src: string;
@@ -10,39 +11,29 @@ interface ImageGalleryProps {
 }
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
-  return (
-    <div className="mx-auto px-5 py-2 lg:pt-24">
-      <div className="-mx-2 flex items-center flex-wrap">
-        {images.map((image, index) => {
-          const isLarge = index === 0; // Check if it's the first image
+  const numColumns = 4;
+  const rowsPerColumn = Math.ceil(images.length / numColumns);
 
-          return (
-            <div
-              key={index}
-              className={`w-full sm:w-1/2 md:w-1/3 ${isLarge ? 'sm:px-2 py-2' : 'md:px-2 md:py-2'}`}
-            >
-              <div
-                style={{
-                  height: '500px', 
-                  overflow: 'hidden',
-                  borderRadius: '10px', 
-                  objectFit: 'cover',
-                }}
-              >
-                <img
-                  alt={image.alt}
-                  style={{
-                    width: '100%',
-                    height: '100%', // This will make the image fill the container without stretching
-                    objectFit: 'cover', // This ensures the image maintains its aspect ratio and covers the container
-                  }}
-                  src={image.src}
-                />
-              </div>
+  const columns = Array.from({ length: numColumns }, (_, colIndex) => {
+    return images.slice(colIndex * rowsPerColumn, (colIndex + 1) * rowsPerColumn);
+  });
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-5">
+      {columns.map((columnImages, colIndex) => (
+        <div key={colIndex} className="grid gap-4">
+          {columnImages.map((image, index) => (
+            <div key={index}>
+              <img
+                className="h-auto max-w-full rounded-lg object-cover object-center"
+                src={image.src}
+                alt={image.alt}
+                loading="lazy"
+              />
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

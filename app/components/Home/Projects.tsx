@@ -62,16 +62,11 @@ function Projects() {
     setShowAllProjects(!showAllProjects);
   };
 
-  const handleExpandProject = (index: number) => {
-    setExpandedProjectIndex(index);
-  };
-
   return (
     <div className="py-8 w-full flex flex-col items-center" id="projects">
       <h3 className="tracking-[15px] text-center my-10 uppercase text-slate-400 text-xl md:text-3xl">
         Projects
       </h3>
-      {/* Mapping through the projects to display them */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-7 w-full">
         {projectsToShow.map((project, index) => (
           <div

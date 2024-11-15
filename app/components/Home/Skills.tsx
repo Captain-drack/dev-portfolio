@@ -90,7 +90,7 @@ function SkillItem({ name, imageSrc, percentage }: SkillItemProps) {
           <div
             className="bg-indigo-600 h-2 rounded-full"
             style={{ width: `${percentage}%` }}
-          ></div>
+          />
         </div>
       </div>
     </div>

@@ -23,19 +23,15 @@ const ContactUs: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // Check if any field is empty
     if (
       !formData.name ||
       !formData.contactNumber ||
       !formData.email ||
       !formData.message
     ) {
-      // Handle the case where any field is empty
       alert("Please fill in all fields");
       return;
     }
-
-    // Use your Email.js template ID and user ID here
     emailjs
       .send(
         "service_4jlb1md",
@@ -46,18 +42,18 @@ const ContactUs: React.FC = () => {
       .then(
         (response) => {
           console.log("Email sent:", response);
-          // Handle success, e.g., show a success message to the user.
-          setShowSuccessMessage(true); // Set success message to true
-          setFormData(initialFormData); // Clear the form data
+          setShowSuccessMessage(true);
+          setFormData(initialFormData);
         },
         (error) => {
           console.error("Error sending email:", error);
-          // Handle error, e.g., show an error message to the user.
         }
       );
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -92,17 +88,18 @@ const ContactUs: React.FC = () => {
                         <input
                           type="text"
                           name="name"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white "
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
                           placeholder="Name"
                           value={formData.name}
                           onChange={handleChange}
                         />
                       </div>
                       <div className="relative mb-6" data-te-input-wrapper-init>
+                        
                         <input
                           type="number"
                           name="contactNumber"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white text-black"
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
                           placeholder="Contact Number"
                           value={formData.contactNumber}
                           onChange={handleChange}
@@ -112,7 +109,7 @@ const ContactUs: React.FC = () => {
                         <input
                           type="email"
                           name="email"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white "
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
                           placeholder="Email address"
                           value={formData.email}
                           onChange={handleChange}
@@ -121,12 +118,12 @@ const ContactUs: React.FC = () => {
                       <div className="relative mb-6" data-te-input-wrapper-init>
                         <textarea
                           name="message"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded border-0 bg-white text-black"
-                          rows={6}
+                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
+                          rows={3}
                           placeholder="Your message"
                           value={formData.message}
                           onChange={handleChange}
-                        ></textarea>
+                        />
                       </div>
                       <button
                         type="button"
@@ -169,6 +166,6 @@ const ContactUs: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ContactUs;
