@@ -93,7 +93,7 @@ function Body() {
                   </div>
                 </div>
               </Link>
-              <div className="flex items-center space-x-4 mt-5">
+              <div className="flex items-center space-x-4 md:mt-5">
                 {socialMediaLinks.map((socialLink, index) => (
                   <Link
                     target="_blank"

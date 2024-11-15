@@ -1,22 +1,13 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  BiLogoFacebook,
-  BiLogoInstagram,
-  BiLogoLinkedin,
-  BiLogoWhatsapp,
-  BiLogoGithub,
-  BiSortDown,
-} from "react-icons/bi";
-import {
-  menuItems,
-  logoText,
-  logoTextSecondary,
-} from "./HeaderData";
+import { BiSortDown } from "react-icons/bi";
+import { menuItems, logoText, logoTextSecondary } from "./HeaderData";
+import { usePathname } from "next/navigation";
 
 const Header: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
 
   const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
 
@@ -55,7 +46,11 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className=" flex items-center justify-between py-8">
+      <div
+        className={`flex items-center ${
+          pathname !== "/gallery" ? "justify-between" : "justify-center"
+        } py-8`}
+      >
         {/* left part */}
         <div>
           <Link
@@ -68,99 +63,103 @@ const Header: React.FC = () => {
             </span>
           </Link>
         </div>
-        {/* mid part */}
-        <div className="hidden lg:flex justify-center items-center space-x-8 flex-wrap">
-          {menuItems.map((menuItem, index) => (
-            <Link
-              key={index}
-              href={menuItem.link}
-              className="text-l text-slate-400 font-bold hover:text-white cursor-pointer"
-            >
-              {menuItem.text}
-            </Link>
-          ))}
-        </div>
-        {/* right part */}
-        <div className="flex items-center gap-4">
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              id="dropdownDividerButton"
-              data-dropdown-toggle="dropdownDivider"
-              className="p-2 rounded-full bg-white"
-              type="button"
-            >
-              <BiSortDown className="text-xl text-black" />
-            </button>
-
-            <div
-              id="dropdownDivider"
-              className={`z-10 ${
-                isDropdownVisible ? "" : "hidden"
-              } divide-y absolute right-0 mt-1 bg-indigo-800 divide-slate-400 rounded-lg shadow-xl w-44`}
-            >
-              <ul
-                className="block lg:hidden  py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownDividerButton"
-              >
-                <li>
-                  <Link
-                    onClick={handleDropdownItemClick}
-                    href="#about"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={handleDropdownItemClick}
-                    href="#experience"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
-                  >
-                    Experience
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={handleDropdownItemClick}
-                    href="#skills"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
-                  >
-                    Skills
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={handleDropdownItemClick}
-                    href="#projects"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
-                  >
-                    Projects
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={handleDropdownItemClick}
-                    href="#contact"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
-                  >
-                    Contact Me
-                  </Link>
-                </li>
-              </ul>
-              <div className="py-2">
+        {pathname !== "/gallery" && (
+          <>
+            {/* mid part */}
+            <div className="hidden lg:flex justify-center items-center space-x-8 flex-wrap">
+              {menuItems.map((menuItem, index) => (
                 <Link
-                  onClick={handleDropdownItemClick}
-                  href="/gallery"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:text-gray-200 dark:hover:text-white"
+                  key={index}
+                  href={menuItem.link}
+                  className="text-l text-slate-400 font-bold hover:text-white cursor-pointer"
                 >
-                  Gallery
+                  {menuItem.text}
                 </Link>
+              ))}
+            </div>
+            {/* right part */}
+            <div className="flex items-center gap-4">
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={toggleDropdown}
+                  id="dropdownDividerButton"
+                  data-dropdown-toggle="dropdownDivider"
+                  className="p-2 rounded-full bg-white"
+                  type="button"
+                >
+                  <BiSortDown className="text-xl text-black" />
+                </button>
+
+                <div
+                  id="dropdownDivider"
+                  className={`z-10 ${
+                    isDropdownVisible ? "" : "hidden"
+                  } divide-y absolute right-0 mt-1 bg-indigo-800 divide-slate-400 rounded-lg shadow-xl w-44`}
+                >
+                  <ul
+                    className="block lg:hidden  py-2 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownDividerButton"
+                  >
+                    <li>
+                      <Link
+                        onClick={handleDropdownItemClick}
+                        href="#about"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
+                      >
+                        About
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={handleDropdownItemClick}
+                        href="#experience"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
+                      >
+                        Experience
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={handleDropdownItemClick}
+                        href="#skills"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
+                      >
+                        Skills
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={handleDropdownItemClick}
+                        href="#projects"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
+                      >
+                        Projects
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={handleDropdownItemClick}
+                        href="#contact"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white"
+                      >
+                        Contact Me
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="py-2">
+                    <Link
+                      onClick={handleDropdownItemClick}
+                      href="/gallery"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      Gallery
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </header>
   );
