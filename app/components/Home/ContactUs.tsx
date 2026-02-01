@@ -326,28 +326,140 @@ const ContactUs: React.FC = () => {
 
                 {showSuccessMessage ? (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-20"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="relative text-center py-16 overflow-hidden"
                   >
-                    <div className="mx-auto w-24 h-24 bg-[var(--palette-primary)]/5 rounded-full flex items-center justify-center text-[var(--palette-primary)] mb-8 border border-[var(--palette-primary)]/20">
-                      <CheckCircle2 size={48} />
+                    {/* Animated Background Particles */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      {[...Array(20)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="absolute w-2 h-2 rounded-full"
+                          style={{
+                            background: i % 2 === 0 ? 'var(--palette-primary)' : 'var(--palette-accent2)',
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                          }}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{
+                            opacity: [0, 1, 0],
+                            scale: [0, 1.5, 0],
+                            y: [0, -100],
+                          }}
+                          transition={{
+                            duration: 2,
+                            delay: i * 0.1,
+                            repeat: Infinity,
+                            repeatDelay: 1,
+                          }}
+                        />
+                      ))}
                     </div>
-                    <h3
-                      className="text-4xl font-serif mb-4"
-                      style={{ color: "rgb(var(--color-foreground))" }}
+
+                    {/* Success Icon with Ripple Effect */}
+                    <div className="relative mx-auto w-32 h-32 mb-10">
+                      {/* Outer Ripple Rings */}
+                      {[1, 2, 3].map((ring) => (
+                        <motion.div
+                          key={ring}
+                          className="absolute inset-0 rounded-full border-2"
+                          style={{ borderColor: 'var(--palette-primary)' }}
+                          initial={{ opacity: 0.6, scale: 1 }}
+                          animate={{
+                            opacity: 0,
+                            scale: 2,
+                          }}
+                          transition={{
+                            duration: 2,
+                            delay: ring * 0.4,
+                            repeat: Infinity,
+                            ease: "easeOut",
+                          }}
+                        />
+                      ))}
+
+                      {/* Main Icon Container */}
+                      <motion.div
+                        className="absolute inset-0 rounded-full flex items-center justify-center"
+                        style={{
+                          background: 'linear-gradient(135deg, var(--palette-primary), var(--palette-accent2))',
+                          boxShadow: '0 20px 60px -15px var(--palette-primary)',
+                        }}
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 15,
+                          delay: 0.2,
+                        }}
+                      >
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
+                        >
+                          <CheckCircle2 size={56} className="text-white" strokeWidth={2.5} />
+                        </motion.div>
+                      </motion.div>
+                    </div>
+
+                    {/* Success Text with Stagger */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6, duration: 0.5 }}
                     >
-                      Received
-                    </h3>
-                    <p className="opacity-60 text-lg mb-10">
-                      Your digital transmission was successful.
-                    </p>
-                    <Button
-                      onClick={() => setShowSuccessMessage(false)}
-                      variant="outline"
+                      <h3
+                        className="text-5xl font-bold mb-4 bg-clip-text text-transparent"
+                        style={{
+                          backgroundImage: 'linear-gradient(135deg, var(--palette-primary), var(--palette-accent2))',
+                        }}
+                      >
+                        Message Sent!
+                      </h3>
+                    </motion.div>
+
+                    <motion.p
+                      className="text-lg mb-3"
+                      style={{ color: 'rgb(var(--color-foreground) / 0.7)' }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8, duration: 0.5 }}
                     >
-                      New Transmission
-                    </Button>
+                      Your message has been transmitted successfully.
+                    </motion.p>
+
+                    <motion.p
+                      className="text-sm opacity-50 mb-10"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.5 }}
+                      transition={{ delay: 1 }}
+                    >
+                      I&apos;ll get back to you within 24 hours ⚡
+                    </motion.p>
+
+                    {/* Animated Button */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.2, duration: 0.5 }}
+                    >
+                      <Button
+                        onClick={() => setShowSuccessMessage(false)}
+                        variant="outline"
+                        className="group relative overflow-hidden px-8 py-3"
+                      >
+                        <motion.span
+                          className="absolute inset-0 bg-gradient-to-r from-[var(--palette-primary)] to-[var(--palette-accent2)] opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                        />
+                        <span className="relative flex items-center gap-2">
+                          <Sparkles size={16} />
+                          Send Another Message
+                        </span>
+                      </Button>
+                    </motion.div>
                   </motion.div>
                 ) : (
                   <form
