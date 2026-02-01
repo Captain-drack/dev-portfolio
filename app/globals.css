@@ -306,11 +306,11 @@ body {
 
 @layer utilities {
   .font-serif {
-    font-family: var(--font-playfair), serif;
+    font-family: var(--font-playwrite), serif;
   }
 
   .font-sans {
-    font-family: var(--font-poppins), sans-serif;
+    font-family: var(--font-playwrite), sans-serif;
   }
 
   .text-editorial {
