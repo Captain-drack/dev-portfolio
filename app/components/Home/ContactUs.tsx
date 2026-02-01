@@ -1,170 +1,467 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect, useRef, FormEvent } from "react";
 import emailjs from "emailjs-com";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import {
+  Mail,
+  User,
+  Phone,
+  MessageSquare,
+  CheckCircle2,
+  ArrowUpRight,
+  Sparkles,
+  Send,
+  Globe,
+  MapPin,
+  Navigation,
+} from "lucide-react";
+import { Section, Container, Button, SectionBadge } from "@/app/components/ui";
+import { TextScramble } from "@/app/components/ui/TextScramble";
+import { socialLinks } from "@/app/data";
+import type { ContactFormData } from "@/app/types";
 
-interface FormData {
-  name: string;
-  contactNumber: string;
-  email: string;
-  message: string;
-}
+const GoogleMapEmbed = () => {
+  return (
+    <div className="relative w-full aspect-video md:aspect-[4/3] rounded-xl overflow-hidden border border-[rgba(var(--color-foreground),0.1)] group">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55309.8452445851!2d77.86835261907402!3d29.86245037142661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eb36e0854c939%3A0x98587281da4ce8c4!2sRoorkee%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1706646545000!5m2!1sen!2sin"
+        className="absolute inset-0 w-full h-full grayscale invert opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+        style={{
+          border: 0,
+          filter: "grayscale(100%) invert(100%) contrast(0.8) brightness(1.2)",
+        }}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+
+      {/* Overlay Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)] via-transparent to-transparent pointer-events-none" />
+
+      {/* Location Tag */}
+      <motion.div
+        className="absolute bottom-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--palette-primary)]/90 text-white text-xs font-semibold shadow-lg backdrop-blur-md"
+        whileHover={{ scale: 1.05 }}
+      >
+        <Navigation size={12} fill="currentColor" />
+        <span>Base / Roorkee, Uttarakhand</span>
+      </motion.div>
+    </div>
+  );
+};
+
+// --- HYPER-PRISM INPUT ---
+// Refined Architectural Input: Floating Glass Plate with Sharp Edges
+const PrismInput = ({
+  name,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  required = false,
+  icon: Icon,
+}: any) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const hasValue = value.length > 0;
+
+  return (
+    <div className="relative group">
+      {/* Prism Edge Highlight */}
+      <div
+        className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--palette-primary)] to-transparent transition-transform duration-500 ${isFocused ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"}`}
+      />
+
+      <div
+        className={`relative flex items-center gap-4 p-5 transition-all duration-300
+                    ${isFocused
+            ? "bg-[rgba(var(--color-foreground),0.03)]"
+            : "bg-transparent hover:bg-[rgba(var(--color-foreground),0.01)]"
+          }
+                `}
+        style={{
+          borderBottom: "1px solid rgba(var(--color-foreground), 0.1)",
+        }}
+      >
+        <div
+          className={`transition-colors duration-300 ${isFocused ? "text-[var(--palette-primary)]" : "text-[rgba(var(--color-foreground),0.4)]"}`}
+        >
+          <Icon size={18} />
+        </div>
+
+        <div className="flex-1 relative">
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            required={required}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="w-full bg-transparent text-lg outline-none placeholder-transparent relative z-10 font-light tracking-wide py-1"
+            placeholder={placeholder}
+            style={{ color: "rgb(var(--color-foreground))" }}
+          />
+          <label
+            className={`absolute left-0 transition-all duration-300 pointer-events-none uppercase tracking-widest text-xs font-semibold
+                            ${isFocused || hasValue ? "-top-5 text-[var(--palette-primary)]" : "top-1.5 text-[rgba(var(--color-foreground),0.5)]"}
+                        `}
+          >
+            {placeholder}
+          </label>
+        </div>
+
+        <AnimatePresence>
+          {hasValue && required && (
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              className="text-[var(--palette-primary)]"
+            >
+              <CheckCircle2 size={16} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Vertical Marker */}
+        <div
+          className={`absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-0 bg-[var(--palette-primary)] transition-all duration-300 ${isFocused ? "h-1/2" : "h-0"}`}
+        />
+      </div>
+    </div>
+  );
+};
 
 const ContactUs: React.FC = () => {
-  const initialFormData: FormData = {
+  const initialFormData: ContactFormData = {
     name: "",
     contactNumber: "",
     email: "",
     message: "",
   };
 
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [formData, setFormData] = useState<ContactFormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+    setIsSubmitting(true);
+    try {
+      // Map form data to EmailJS template variables
+      const templateParams = {
+        from_name: formData.name,
+        to_name: "Akshat",
+        reply_to: formData.email,
+        message: formData.message,
+        phone: formData.contactNumber || "Not provided",
+      };
 
-    if (
-      !formData.name ||
-      !formData.contactNumber ||
-      !formData.email ||
-      !formData.message
-    ) {
-      alert("Please fill in all fields");
-      return;
-    }
-    emailjs
-      .send(
-        "service_4jlb1md",
-        "template_6t6bw8f",
-        formData as unknown as Record<string, unknown>,
-        "5kAGP3nUKeJQKKCJh"
-      )
-      .then(
-        (response) => {
-          console.log("Email sent:", response);
-          setShowSuccessMessage(true);
-          setFormData(initialFormData);
-        },
-        (error) => {
-          console.error("Error sending email:", error);
-        }
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
       );
+      setShowSuccessMessage(true);
+      setFormData(initialFormData);
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      // Fallback to Mailto
+      const subject = `Portfolio Contact: ${formData.name}`;
+      const body = `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.contactNumber}\n\nMessage:\n${formData.message}`;
+      window.location.href = `mailto:${socialLinks.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      alert(
+        "Automatic transmission failed. Opening your email client instead.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Determine if the "Send" button should be disabled
-  const isSendButtonDisabled: boolean =
-    !formData.name ||
-    !formData.contactNumber ||
-    !formData.email ||
-    !formData.message;
+  const ref = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 300, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 300, damping: 30 });
+
+  const rotateX = useTransform(springY, [-0.5, 0.5], ["3deg", "-3deg"]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], ["-3deg", "3deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const { width, height, left, top } = ref.current.getBoundingClientRect();
+    mouseX.set((e.clientX - left) / width - 0.5);
+    mouseY.set((e.clientY - top) / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  if (!isMounted) return null;
 
   return (
-    <div id="contact">
-      <h3 className="tracking-[15px] text-center my-10 uppercase text-slate-400 text-xl md:text-3xl">
-        Contact Me
-      </h3>
-      <div className="container mb-10 mx-auto md:px-6">
-        <section className="mb-5 text-center">
-          <div className="py-12 md:px-12">
-            <div className="container mx-auto xl:px-32">
-              <div className="grid items-center lg:grid-cols-2">
-                <div className="mb-12 md:mt-12 lg:mt-0 lg:mb-0">
-                  <div className="relative z-[1] block rounded-lg bg-[hsla(0,0%,100%,0.55)] px-6 py-12 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] backdrop-blur-[30px] dark:bg-[#17255470] dark:shadow-black/20 md:px-12 lg:-mr-14">
-                    <h2 className="mb-12 text-3xl text-white uppercase">
-                      Contact Me
-                    </h2>
-                    <form>
-                      <div className="relative mb-6" data-te-input-wrapper-init>
-                        <input
-                          type="text"
-                          name="name"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
-                          placeholder="Name"
-                          value={formData.name}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="relative mb-6" data-te-input-wrapper-init>
-                        
-                        <input
-                          type="number"
-                          name="contactNumber"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
-                          placeholder="Contact Number"
-                          value={formData.contactNumber}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="relative mb-6" data-te-input-wrapper-init>
-                        <input
-                          type="email"
-                          name="email"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
-                          placeholder="Email address"
-                          value={formData.email}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="relative mb-6" data-te-input-wrapper-init>
-                        <textarea
-                          name="message"
-                          className="peer py-2 px-3 min-h-[auto] w-full rounded-none border-b bg-white bg-opacity-0 focus:outline-none"
-                          rows={3}
-                          placeholder="Your message"
-                          value={formData.message}
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        data-te-ripple-init
-                        data-te-ripple-color="light"
-                        className={`text-blue-950 font-bold shadow-lg shadow-blue-500/50 bg-white px-7 py-2 rounded-full mt-3 flex justify-center items-center w-full ${
-                          isSendButtonDisabled ? "text-slate-400" : ""
-                        }`}
-                        disabled={isSendButtonDisabled}
-                      >
-                        {/* Send */}
-                        {showSuccessMessage ? (
-                          <div className="success-message ">
-                            <p>Email sent successfully!</p>
-                          </div>
-                        ) : (
-                          <div className="success-message ">
-                            <p>send</p>
-                          </div>
-                        )}
-                      </button>
-                    </form>
+    <Section
+      id="contact"
+      className="relative cursor-default overflow-hidden py-24"
+    >
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: `linear-gradient(to top, transparent, rgb(var(--color-background) / 0.5), transparent)`,
+        }}
+      />
+
+      <Container>
+        <div className="relative z-10">
+          <div className="mb-16">
+            <SectionBadge
+              number="06"
+              label="CONTACT"
+              icon={Globe}
+              title="Global"
+              titleAccent="Nexus"
+              subtitle="Ready to engineer the future? Establish a connection."
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch">
+            <div className="lg:col-span-4 flex flex-col gap-10">
+              <div>
+                <h3
+                  className="text-3xl font-light leading-tight mb-6"
+                  style={{ color: "rgb(var(--color-foreground))" }}
+                >
+                  <TextScramble text="Global presence," trigger="load" />{" "}
+                  <span className="font-serif italic text-[var(--palette-primary)]">
+                    <TextScramble text="local impact." trigger="load" />
+                  </span>
+                </h3>
+                <p className="opacity-60 text-lg leading-relaxed">
+                  Operating remotely across major tech hubs. Always reachable,
+                  always online.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <GoogleMapEmbed />
+
+                <div className="flex flex-col gap-6 pt-4 border-t border-[rgba(var(--color-foreground),0.1)]">
+                  <div className="group cursor-pointer">
+                    <p className="text-xs uppercase tracking-widest opacity-50 mb-2">
+                      Email
+                    </p>
+                    <a
+                      href={`mailto:${socialLinks.email}`}
+                      className="text-lg hover:text-[var(--palette-primary)] transition-colors inline-flex items-center gap-2"
+                    >
+                      {socialLinks.email}{" "}
+                      <ArrowUpRight
+                        size={16}
+                        className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[var(--palette-primary)]"
+                      />
+                    </a>
                   </div>
-                </div>
-                <div className="md:mb-5 lg:mb-0">
-                  <div className="relative h-[700px] rounded-lg shadow-lg dark:shadow-black/20">
-                    <iframe
-                      src="https://maps.google.com/maps?q=Roorkee&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                      className="absolute left-0 top-0 h-full w-full rounded-lg"
-                      frameBorder={0}
-                      allowFullScreen
-                    ></iframe>
+                  <div>
+                    <p className="text-xs uppercase tracking-widest opacity-50 mb-2">
+                      Availability
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      <p className="text-sm font-medium">
+                        Accepting New Projects
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* RIGHT: HYPER-PRISM FORM CARD */}
+            <div className="lg:col-span-8 perspective-1000 flex items-center">
+              <motion.div
+                ref={ref}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{
+                  rotateX,
+                  rotateY,
+                  transformStyle: "preserve-3d",
+                  background: `rgb(var(--color-card))`,
+                  border: `1px solid rgb(var(--color-foreground) / 0.08)`,
+                  boxShadow: `0 30px 60px -15px rgb(var(--color-foreground) / 0.05)`,
+                }}
+                className="relative w-full p-8 md:p-14 rounded-2xl overflow-hidden"
+              >
+                {/* Decorative Background Pattern inside Card */}
+                <div
+                  className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                  style={{
+                    backgroundImage: `radial-gradient(circle at 2px 2px, rgb(var(--color-foreground)) 1px, transparent 0)`,
+                    backgroundSize: "32px 32px",
+                  }}
+                />
+
+                {showSuccessMessage ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-20"
+                  >
+                    <div className="mx-auto w-24 h-24 bg-[var(--palette-primary)]/5 rounded-full flex items-center justify-center text-[var(--palette-primary)] mb-8 border border-[var(--palette-primary)]/20">
+                      <CheckCircle2 size={48} />
+                    </div>
+                    <h3
+                      className="text-4xl font-serif mb-4"
+                      style={{ color: "rgb(var(--color-foreground))" }}
+                    >
+                      Received
+                    </h3>
+                    <p className="opacity-60 text-lg mb-10">
+                      Your digital transmission was successful.
+                    </p>
+                    <Button
+                      onClick={() => setShowSuccessMessage(false)}
+                      variant="outline"
+                    >
+                      New Transmission
+                    </Button>
+                  </motion.div>
+                ) : (
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-0 relative z-10"
+                  >
+                    <div className="mb-10 flex items-center justify-between">
+                      <h4 className="text-xs font-mono uppercase tracking-[0.2em] opacity-40">
+                        Identification Protocol
+                      </h4>
+                      <div className="h-px w-32 bg-[rgba(var(--color-foreground),0.1)]" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                      <PrismInput
+                        name="name"
+                        icon={User}
+                        placeholder="Full Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                      />
+                      <PrismInput
+                        name="email"
+                        type="email"
+                        icon={Mail}
+                        placeholder="Email Address"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="py-2"></div>
+
+                    <div className="mb-6 mt-8 flex items-center justify-between">
+                      <h4 className="text-xs font-mono uppercase tracking-[0.2em] opacity-40">
+                        Message Payload
+                      </h4>
+                      <div className="h-px w-32 bg-[rgba(var(--color-foreground),0.1)]" />
+                    </div>
+
+                    <PrismInput
+                      name="contactNumber"
+                      type="tel"
+                      icon={Phone}
+                      placeholder="Phone Number (Optional)"
+                      value={formData.contactNumber || ""}
+                      onChange={handleChange}
+                    />
+
+                    {/* Prism Textarea */}
+                    <div className="relative group">
+                      <div
+                        className={`relative flex gap-4 p-5 transition-all duration-300
+                                                ${formData.message ? "bg-[rgba(var(--color-foreground),0.03)]" : "bg-transparent"}
+                                            `}
+                      >
+                        {/* Edge Highlight */}
+                        <div
+                          className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--palette-primary)] to-transparent transition-transform duration-500 ${formData.message ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"}`}
+                        />
+                        {/* Vertical Marker */}
+                        <div
+                          className={`absolute left-0 top-6 w-[2px] h-0 bg-[var(--palette-primary)] transition-all duration-300 ${formData.message || "group-focus-within:h-8"}`}
+                        />
+
+                        <div
+                          className={`transition-colors duration-300 h-fit pt-1 ${formData.message ? "text-[var(--palette-primary)]" : "text-[rgba(var(--color-foreground),0.4)]"}`}
+                        >
+                          <MessageSquare size={18} />
+                        </div>
+                        <div className="flex-1 relative">
+                          <textarea
+                            name="message"
+                            rows={5}
+                            value={formData.message}
+                            onChange={handleChange}
+                            required
+                            className="w-full bg-transparent text-lg resize-none outline-none placeholder-transparent relative z-10 font-light tracking-wide py-1"
+                            placeholder="Your Message"
+                            style={{ color: "rgb(var(--color-foreground))" }}
+                          />
+                          <label
+                            className={`absolute left-0 transition-all duration-300 pointer-events-none uppercase tracking-widest text-xs font-semibold
+                                                    ${formData.message ? "-top-5 text-[var(--palette-primary)]" : "top-1.5 text-[rgba(var(--color-foreground),0.5)]"}
+                                                `}
+                          >
+                            Your Message
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end pt-8">
+                      <Button
+                        type="submit"
+                        size="lg"
+                        isLoading={isSubmitting}
+                        className="min-w-[200px]"
+                      >
+                        <span className="flex items-center gap-3">
+                          Transmit <Send size={16} />
+                        </span>
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </motion.div>
+            </div>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      </Container>
+    </Section>
   );
 };
 

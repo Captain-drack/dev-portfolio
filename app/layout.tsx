@@ -1,10 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import { Inter, Playfair_Display } from "next/font/google";
+import { ThemeProvider } from "./context/ThemeContext";
+import LayoutContent from "./LayoutContent";
+import GlobalSplash from "./components/ui/GlobalSplash";
+import { SplashProvider } from "./context/SplashContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
   title: "Akshat Austin",
@@ -17,15 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className} suppressHydrationWarning={true}>
-        <div className="h-screen w-screen overflow-y-scroll bg-gradient-to-r from-blue-950 from-10%  to-indigo-600  flex justify-center scroll-smooth">
-          <div className="w-full h-screen px-5 md:w-5/6 ">
-            <Header />
-            {children}
-            <Footer />
-          </div>
-        </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${playfair.variable} font-sans selection:bg-white selection:text-black`} suppressHydrationWarning={true}>
+        <ThemeProvider>
+          <SplashProvider>
+            <GlobalSplash />
+            <LayoutContent>{children}</LayoutContent>
+          </SplashProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

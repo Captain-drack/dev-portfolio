@@ -1,10 +1,20 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import ImageGallery from "../components/Gallery/ImageGallery";
-import Lottie from "lottie-react";
-import AnimationData from "../assets/loader.json";
+import dynamic from "next/dynamic";
+import { useSplash } from "../context/SplashContext";
+
+const ImageGallery = dynamic(() => import("../components/Gallery/ImageGallery"), {
+  ssr: false,
+});
+
 
 const GalleryPage: React.FC = () => {
+  const { triggerSplash } = useSplash();
+
+  useEffect(() => {
+    triggerSplash();
+  }, [triggerSplash]);
+
   const imageUrls = useMemo(
     () => [
       "/capture/1.jpg",
@@ -75,29 +85,11 @@ const GalleryPage: React.FC = () => {
     [imageUrls]
   );
 
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setImagesLoaded(true);
-    }, 1000);
-    return () => clearTimeout(loadingTimeout);
-  }, []);
 
   return (
     <div className="w-full">
-      <h3 className="tracking-[15px] text-center mt-10 uppercase text-slate-400 text-xl md:text-3xl">
-        Photo Gallery
-      </h3>
-      {!imagesLoaded ? (
-        <div className="mx-auto px-5 ">
-          <div className="-mx-2 h-screen flex items-start justify-center">
-            <Lottie animationData={AnimationData} loop={true} />
-          </div>
-        </div>
-      ) : (
-        <ImageGallery images={images} />
-      )}
+      <ImageGallery images={images} />
     </div>
   );
 };

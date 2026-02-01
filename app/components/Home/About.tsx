@@ -1,78 +1,216 @@
 "use client";
 import React from "react";
-import { BiPhone } from "react-icons/bi";
+import { motion } from "framer-motion";
+import { ArrowUpRight, User } from "lucide-react";
+import { Section, Container, ScrollReveal, SectionBadge } from "@/app/components/ui";
+import { aboutData } from "@/app/data/about";
 
 const About: React.FC = () => {
+  const { headline, description, ctaText, ctaLink, stats, expertise, technologies } = aboutData;
+
   return (
-    <div className="py-8" id="about">
-      <h3 className="tracking-[15px] text-center my-10 uppercase text-slate-400 text-xl md:text-3xl">
-        About
-      </h3>
-      <div className="w-5/6 mx-auto mb-10">
-        <div className="flex flex-col justify-between items-center md:flex-row md:space-x-8">
-          <figure className="md:w-1/2 mb-10 md:mb-0 relative w-full">
-            <img
-              src="/images/AboutMe.jpg"
-              alt="Akshat-Austin"
-              className="shadow-2xl rounded-md max-w-full h-auto align-middle border-none "
-            />
-            <figcaption className="absolute text-center bottom-8 left-2/4 w-[calc(100%-4rem)] -translate-x-2/4 rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
-              <h6 className="text-black font-bold">Akshat Austin</h6>
-              <p className="text-black ">Frontend Developer</p>
-              <div className="flex items-center justify-center text-black">
-                <BiPhone className="text-xl" />
-                <p className=" ml-1">+919870774547</p>
+    <Section id="about">
+      <Container>
+        {/* Section Header */}
+        <SectionBadge
+          number="01"
+          label="About"
+          icon={User}
+          title=""
+          titleAccent=""
+        />
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+
+            {/* Hero Card */}
+            <ScrollReveal direction="up" delay={0.1}>
+              <motion.div
+                className="relative p-8 md:p-12 rounded-3xl overflow-hidden group"
+                style={{
+                  background: `linear-gradient(135deg, rgb(var(--color-card)), rgb(var(--color-card) / 0.5))`,
+                  border: `1px solid rgb(var(--color-foreground) / 0.08)`,
+                }}
+                whileHover={{ scale: 1.01 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Gradient Accent */}
+                <div
+                  className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"
+                  style={{ background: `linear-gradient(135deg, var(--palette-primary), var(--palette-accent2))` }}
+                />
+
+                <h2
+                  className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.1] mb-6 relative z-10"
+                  style={{ color: `rgb(var(--color-foreground))` }}
+                >
+                  {headline.before}{" "}
+                  <span
+                    className="italic bg-clip-text text-transparent"
+                    style={{ backgroundImage: `linear-gradient(135deg, var(--palette-primary), var(--palette-accent2))` }}
+                  >
+                    {headline.highlight}
+                  </span>{" "}
+                  {headline.after}
+                </h2>
+
+                <p
+                  className="text-lg md:text-xl leading-relaxed max-w-2xl relative z-10"
+                  style={{ color: `rgb(var(--color-foreground) / 0.8)` }}
+                >
+                  {description}
+                </p>
+
+                {/* CTA */}
+                <motion.a
+                  href={ctaLink}
+                  className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full text-sm font-medium uppercase tracking-wider relative z-10 group/btn"
+                  style={{
+                    background: `linear-gradient(135deg, var(--palette-primary), var(--palette-accent2))`,
+                    color: `rgb(var(--color-background))`,
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {ctaText}
+                  <ArrowUpRight size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                </motion.a>
+              </motion.div>
+            </ScrollReveal>
+
+            {/* Stats Row */}
+            <ScrollReveal direction="up" delay={0.2}>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    className="relative p-4 sm:p-6 rounded-2xl text-center group"
+                    style={{
+                      background: `rgb(var(--color-card))`,
+                      border: `1px solid rgb(var(--color-foreground) / 0.08)`,
+                    }}
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <stat.icon
+                      size={20}
+                      className="mx-auto mb-3 opacity-50 group-hover:opacity-100 transition-opacity"
+                      style={{ color: `var(--palette-primary)` }}
+                    />
+                    <div
+                      className="text-3xl md:text-4xl font-bold font-serif mb-1"
+                      style={{ color: `var(--palette-primary)` }}
+                    >
+                      {stat.number}
+                    </div>
+                    <div
+                      className="text-xs font-mono uppercase tracking-wider"
+                      style={{ color: `rgb(var(--color-foreground) / 0.6)` }}
+                    >
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </figcaption>
-          </figure>
-          <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-2 md:gap-4">
-            <p className="text-slate-400">
-              Hello, I&apos;m{" "}
-              <span className="text-white font-bold">Akshat Austin</span>, a
-              passionate Frontend Developer with over 3.5 years of hands-on
-              experience. Currently, I&apos;m exploring the world of
-              freelancing, where I craft exceptional user interfaces and
-              delightful user experiences.
-            </p>
-            <div>
-              <h3 className="text-xl font-semibold tracking-wide text-white">
-                Professional Journey
-              </h3>
-              <p className="mt-3 text-slate-400">
-                I&apos;ve had the privilege of contributing my skills to two
-                prominent companies, where my primary focus has been on creating
-                polished and intuitive user interfaces. Whether it&apos;s web or
-                mobile, I believe in the power of design to enhance user
-                engagement.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold tracking-wide text-white">
-                Expertise
-              </h3>
-              <p className="mt-3 text-slate-400">
-                My toolkit includes React.js, Next.js, React Native, Material
-                UI, CSS3, HTML5, TypeScript, Tailwind CSS, Redux, and more. I
-                thrive on staying up-to-date with the latest industry trends and
-                technologies.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold tracking-wide text-white">
-                Versatile Skills
-              </h3>
-              <p className="mt-3 text-slate-400">
-                Beyond coding, I&apos;m a multi-talented individual. I&apos;m
-                adept at video editing, a nature enthusiast who enjoys trekking,
-                a creative artist skilled in sketching, and a master of the
-                culinary arts. Photoshop wizardry and PC gaming are also in my
-                repertoire.
-              </p>
-            </div>
+            </ScrollReveal>
+          </div>
+
+          {/* Right Column - Expertise Cards */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            {expertise.map((item, index) => (
+              <ScrollReveal key={index} direction="up" delay={0.1 + index * 0.1}>
+                <motion.div
+                  className="relative p-6 rounded-2xl group cursor-pointer overflow-hidden"
+                  style={{
+                    background: `rgb(var(--color-card))`,
+                    border: `1px solid rgb(var(--color-foreground) / 0.08)`,
+                  }}
+                  whileHover={{ x: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Hover Gradient */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `linear-gradient(135deg, var(--palette-primary) / 0.05, transparent)`,
+                    }}
+                  />
+
+                  <div className="relative z-10 flex items-start gap-4">
+                    <div
+                      className="shrink-0 p-3 rounded-xl"
+                      style={{ background: `var(--palette-primary) / 0.1` }}
+                    >
+                      <item.icon
+                        size={24}
+                        style={{ color: `var(--palette-primary)` }}
+                      />
+                    </div>
+                    <div>
+                      <h4
+                        className="text-lg font-semibold mb-2 group-hover:translate-x-1 transition-transform"
+                        style={{ color: `rgb(var(--color-foreground))` }}
+                      >
+                        {item.title}
+                      </h4>
+                      <p
+                        className="text-sm leading-relaxed"
+                        style={{ color: `rgb(var(--color-foreground) / 0.7)` }}
+                      >
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Arrow indicator */}
+                  <ArrowUpRight
+                    size={16}
+                    className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: `var(--palette-primary)` }}
+                  />
+                </motion.div>
+              </ScrollReveal>
+            ))}
+
+            {/* Tech Stack Quick View */}
+            <ScrollReveal direction="up" delay={0.4}>
+              <div
+                className="p-6 rounded-2xl"
+                style={{
+                  background: `linear-gradient(135deg, var(--palette-primary) / 0.1, var(--palette-accent2) / 0.05)`,
+                  border: `1px solid var(--palette-primary) / 0.2`,
+                }}
+              >
+                <h4
+                  className="text-xs font-mono uppercase tracking-[0.2em] mb-4"
+                  style={{ color: `var(--palette-primary)` }}
+                >
+                  Core Technologies
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 text-xs font-medium rounded-full"
+                      style={{
+                        background: `rgb(var(--color-background))`,
+                        color: `rgb(var(--color-foreground))`,
+                        border: `1px solid rgb(var(--color-foreground) / 0.1)`,
+                      }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
         </div>
-      </div>
-    </div>
+      </Container>
+    </Section>
   );
 };
 
