@@ -63,7 +63,7 @@ export function ThemeDropdown() {
     show: {
       opacity: 1, scale: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)",
       transition: {
-        type: "spring", bounce: 0, duration: 0.3,
+        type: "spring" as const, bounce: 0, duration: 0.3,
         staggerChildren: 0.05,
         delayChildren: 0.05
       }

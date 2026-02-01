@@ -60,7 +60,7 @@ export function ColorPaletteDropdown() {
       y: 0,
       clipPath: "inset(0% 0% 0% 0%)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         bounce: 0,
         duration: 0.4,
         staggerChildren: 0.05,

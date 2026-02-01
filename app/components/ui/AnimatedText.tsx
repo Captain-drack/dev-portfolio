@@ -1,19 +1,27 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import type { AnimatedTextProps } from "@/app/types";
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, animation = "words", stagger = 0.03, delay = 0, as = "p", className = "" }) => {
   const Tag = as;
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { delayChildren: delay, staggerChildren: stagger } },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
-    visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
+      }
+    },
   };
 
   if (animation === "chars") {
