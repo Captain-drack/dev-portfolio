@@ -263,6 +263,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     fill
                     className="object-contain"
                     quality={100}
+                    sizes="200vw"
                   />
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-[var(--palette-primary)] font-mono text-xs mix-blend-difference">+ ZOOM 200%</div>

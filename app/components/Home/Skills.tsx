@@ -238,7 +238,7 @@ const SkillPill = ({ skill }: { skill: typeof skillsData[0] }) => {
     >
       {skill.imageSrc && (
         <div className="relative w-6 h-6 group-hover:scale-110 transition-transform">
-          <Image src={skill.imageSrc} alt={skill.name} fill className="object-contain" />
+          <Image src={skill.imageSrc} alt={skill.name} fill className="object-contain" sizes="24px" />
         </div>
       )}
       <span
@@ -372,7 +372,7 @@ const CategoryCard = ({
               >
                 {skill?.imageSrc && (
                   <div className="relative w-5 h-5 group-hover/skill:scale-110 transition-transform">
-                    <Image src={skill.imageSrc} alt={skillName} fill className="object-contain" />
+                    <Image src={skill.imageSrc} alt={skillName} fill className="object-contain" sizes="20px" />
                   </div>
                 )}
                 <span
