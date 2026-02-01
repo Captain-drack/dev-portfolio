@@ -410,7 +410,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                                   width={200}
                                   height={150}
                                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                  quality={30}
+                                  quality={60}
                                   loading="lazy"
                                 />
 
@@ -464,7 +464,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                                   width={100}
                                   height={50}
                                   className="w-full h-full object-cover"
-                                  quality={10}
+                                  quality={50}
                                 />
                               </div>
                             </div>
