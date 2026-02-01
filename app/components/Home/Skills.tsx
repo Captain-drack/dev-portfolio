@@ -67,27 +67,38 @@ const Skills: React.FC = () => {
 
       {/* Floating particles effect */}
       <div className="absolute inset-0 -z-5 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-64 h-64 rounded-full opacity-10"
-            style={{
-              background: `radial-gradient(circle, var(--palette-primary), transparent)`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, 30, 0],
-              y: [0, -30, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {[...Array(6)].map((_, i) => {
+          // Use deterministic positions instead of Math.random() to avoid hydration mismatch
+          const positions = [
+            { left: '10%', top: '20%' },
+            { left: '80%', top: '15%' },
+            { left: '25%', top: '70%' },
+            { left: '65%', top: '55%' },
+            { left: '45%', top: '85%' },
+            { left: '90%', top: '40%' },
+          ];
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-64 h-64 rounded-full opacity-10"
+              style={{
+                background: `radial-gradient(circle, var(--palette-primary), transparent)`,
+                left: positions[i].left,
+                top: positions[i].top,
+              }}
+              animate={{
+                x: [0, 30, 0],
+                y: [0, -30, 0],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 8 + i * 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
       </div>
 
       <Container>
