@@ -310,7 +310,7 @@ body {
   }
 
   .font-sans {
-    font-family: var(--font-inter), sans-serif;
+    font-family: var(--font-poppins), sans-serif;
   }
 
   .text-editorial {
