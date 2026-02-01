@@ -1,14 +1,15 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Playwrite_NZ, Playfair_Display } from "next/font/google";
+import { Roboto, Playfair_Display } from "next/font/google";
 import { ThemeProvider } from "./context/ThemeContext";
 import LayoutContent from "./LayoutContent";
 import GlobalSplash from "./components/ui/GlobalSplash";
 import { SplashProvider } from "./context/SplashContext";
 
-const playwrite = Playwrite_NZ({
-  variable: "--font-playwrite",
-  weight: ["100", "200", "300", "400"]
+const roboto = Roboto({
+  variable: "--font-roboto",
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["latin"]
 });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playwrite.variable} ${playfair.variable} font-sans selection:bg-white selection:text-black`} suppressHydrationWarning={true}>
+      <body className={`${roboto.variable} ${playfair.variable} font-sans selection:bg-white selection:text-black`} suppressHydrationWarning={true}>
         <ThemeProvider>
           <SplashProvider>
             <GlobalSplash />

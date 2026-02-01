@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-playwrite)", "sans-serif"],
-        serif: ["var(--font-playwrite)", "serif"],
+        sans: ["var(--font-roboto)", "sans-serif"],
+        serif: ["var(--font-playfair)", "serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
       },
       backgroundImage: {
