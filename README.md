@@ -2,7 +2,7 @@
 
 # ✨ Akshat Austin — Developer Portfolio
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-akshataustin.vercel.app-blue?style=for-the-badge)](https://akshataustin.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-akshat--austin.vercel.app-blue?style=for-the-badge)](https://akshat-austin.vercel.app)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://typescriptlang.org/)
