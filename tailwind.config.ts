@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-roboto)", "sans-serif"],
-        serif: ["var(--font-playfair)", "serif"],
+        serif: ["var(--font-roboto)", "serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
       },
       backgroundImage: {
