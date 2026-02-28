@@ -136,7 +136,7 @@ const SkillRow = React.memo(({ skillName, skill, gradientStyle, delay }: {
               className="text-[10px] font-semibold uppercase tracking-wider ml-2 shrink-0"
               style={{ color: 'rgb(var(--color-foreground) / 0.35)' }}
             >
-              {getProficiencyLabel(skill.percentage)}
+              {getProficiencyLabel(skill.percentage ?? 0)}
             </span>
           )}
         </div>
